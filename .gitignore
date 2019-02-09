@@ -1,0 +1,5 @@
+.*
+#*
+*~
+files/emacs.d/*
+files/emacs.d/!init.el

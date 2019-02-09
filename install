@@ -1,0 +1,12 @@
+#!/bin/bash
+
+DOTDIR=$PWD/files
+cd $DOTDIR
+
+for file in $(ls)
+do
+	linked=$DOTDIR/$file
+	link=~/.$file
+	ln -sf $linked $link
+	echo "Symlink created: $link->$linked"
+done

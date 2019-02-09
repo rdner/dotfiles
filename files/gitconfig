@@ -1,0 +1,35 @@
+[user]
+	name = Denis Rechkunov
+	email = mail@pragmader.me
+	signingkey = 2878FA9816392358
+[push]
+	default = simple
+[core]
+	editor = emacsclient -c
+[commit]
+	gpgsign = true
+[alias]
+	st = status -sb
+	ci = commit -v
+	b = branch
+	co = checkout
+	ap = add --patch
+	df = diff --word-diff
+	dfc = diff --cached
+	ds = diff --stat
+	lg = log --pretty='%Cgreen%h%Creset %Cred%ad%Creset %s %Cred%d%Creset %Cblue%an%Creset'  --graph --date=short --date-order
+	pl = pull --rebase
+	p = push --follow-tags
+	pf = push --force-with-lease
+	mff = merge --ff-only
+	mnoff = merge --no-ff
+	# Lists branches by most recent commit
+	recent = for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/heads
+	# run pre-commit hooks on a rebase --continue
+	rc = "!.git/hooks/pre-commit && git rebase --continue"
+	fixup = "!git commit --amend"
+	changelog = "!git log --no-merges --pretty=format:\"%h : %s (by %an)\" $(git describe --tags --abbrev=0)...HEAD"
+	mrebase = "!git stash && git checkout master && git pull --rebase && git checkout - && git rebase master && git stash pop"
+	# cleanup old branches
+	outdated = "!git branch --merged | grep -v '\\*\\|master\\|develop'"
+	cleanup = "!git branch --merged | grep -v '\\*\\|master\\|develop' | xargs -n 1 git branch -d"
