@@ -25,34 +25,21 @@ function prompt_deletion() {
 }
 
 function encrypt_dir() {
-	local base=$(basename $1)
-
-	local zip_name="$base.zip"
-	check_exist $zip_name
-
-	local enc_name="$base.enc"
+	local enc_name="$(basename $1).enc"
 	check_exist $enc_name
 
-	echo "Compressing..." && \
-		zip -rv9 $zip_name $1 && \
-		echo "Encrypting..." && \
-		openssl enc -aes-256-cbc -md sha512-256 -salt -v -pbkdf2 -in $zip_name -out $enc_name && \
-		echo "Removing $zip_name..." && \
-		rm $zip_name && \
+	echo "Compressing and encrypting $1 -> $enc_name..." && \
+		tar --use-compress-program="pigz -9" -cf - $1 | openssl enc -aes-256-cbc -md sha512-256 -salt -v -pbkdf2 -out $enc_name && \
 		echo "Successfully encrypted: $enc_name" && \
 		prompt_deletion $1
 }
 
 function decrypt_dir() {
 	local base=$(basename $1)
-	local zip_name="${base%.*}.zip"
-	check_exist $zip_name
-
-	echo "Decrypting..." && \
-		openssl enc -d -aes-256-cbc -md sha512-256 -salt -v -pbkdf2 -in $1 -out $zip_name && \
-		echo "Extracting from $zip_name..." && \
-		unzip $zip_name && \
-		rm $zip_name
+	local dest="${base%.*}"
+	check_exist $dest
+	echo "Decrypting and decompressing $1 -> $dest..." && \
+		openssl enc -d -aes-256-cbc -md sha512-256 -salt -v -pbkdf2 -in $1 | tar --use-compress-program=pigz -x
 }
 
 if [ -z ${1+x} ] || [ -z ${2+x} ]; then
