@@ -43,7 +43,7 @@ fi
 
 
 # prompt customization
-PROMPT_COMMAND="format_prompt; ${PROMPT_COMMAND}"
+PROMPT_COMMAND="format_prompt"
 
 format_prompt() {
 	local exit_status=$?
