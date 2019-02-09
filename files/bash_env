@@ -1,0 +1,18 @@
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export EDITOR=emacs
+
+# go environment
+export GOPATH="$HOME/go"
+export PATH="$PATH:$GOPATH/bin"
+export GO111MODULE=auto
+
+# custom scripts
+if [ -d ~/.scripts ]; then
+	export PATH="$PATH:$HOME/.scripts"
+fi
+
+# local environment
+if [ -f ~/.bash_env.local ]; then
+	source ~/.bash_env.local
+fi
