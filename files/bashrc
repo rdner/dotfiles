@@ -55,7 +55,7 @@ format_prompt() {
 	local reset="\[\e[m\]"
 
 	local exit_color=$green
-	if [[ $exit_status != 0 ]]; then
+	if [[ $exit_status -ne 0 ]]; then
 		exit_color=$red
 	fi
 	PS1="\n$purple\u@\H$reset\w [\j]$exit_color\$$reset "
