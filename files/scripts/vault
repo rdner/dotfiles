@@ -29,7 +29,7 @@ function encrypt_dir() {
 	check_exist $enc_name
 
 	echo "Compressing and encrypting $1 -> $enc_name..." && \
-		tar --use-compress-program="pigz -9" -cf - $1 | openssl enc -aes-256-cbc -md sha512-256 -salt -v -pbkdf2 -out $enc_name && \
+		tar -cf - $1 | gpg --cipher-algo AES256 -co $enc_name && \
 		echo "Successfully encrypted: $enc_name" && \
 		prompt_deletion $1
 }
@@ -38,8 +38,7 @@ function decrypt_dir() {
 	local base=$(basename $1)
 	local dest="${base%.*}"
 	check_exist $dest
-	echo "Decrypting and decompressing $1 -> $dest..." && \
-		openssl enc -d -aes-256-cbc -md sha512-256 -salt -v -pbkdf2 -in $1 | tar --use-compress-program=pigz -x
+	echo "Decrypting and decompressing $1 -> $dest..." && gpg -d $1 | tar -x
 }
 
 if [ -z ${1+x} ] || [ -z ${2+x} ]; then
