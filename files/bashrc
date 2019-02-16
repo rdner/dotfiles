@@ -41,25 +41,10 @@ if ! shopt -oq posix; then
 	fi
 fi
 
-
 # prompt customization
-PROMPT_COMMAND="format_prompt"
-
-format_prompt() {
-	local exit_status=$?
-
-	# colors
-	local red="\[\e[0;31m\]"
-	local green="\[\e[0;32m\]"
-	local purple="\[\e[0;35m\]"
-	local reset="\[\e[m\]"
-
-	local exit_color=$green
-	if [[ $exit_status -ne 0 ]]; then
-		exit_color=$red
-	fi
-	PS1="\n$purple\u@\H$reset\w [\j]$exit_color\$$reset "
-}
+if [ -f ~/.bash_prompt ]; then
+	 source ~/.bash_prompt
+fi
 
 # load aliases
 if [ -f ~/.bash_aliases ]; then
