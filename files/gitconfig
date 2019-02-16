@@ -5,7 +5,7 @@
 [push]
 	default = simple
 [core]
-	editor = emacsclient -c
+	editor = emacsclient -ca ''
 [commit]
 	gpgsign = true
 [alias]
