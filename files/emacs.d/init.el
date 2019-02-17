@@ -14,14 +14,11 @@
 (package-initialize)
 
 (defvar package-list '(
-											 find-file-in-project
 											 flycheck
 											 auto-complete
 											 whitespace
 											 badwolf-theme
-											 expand-region
 											 editorconfig
-											 smex
 											 magit
 
 											 ;; general modes
@@ -63,13 +60,10 @@
 (load-theme 'badwolf t)
 
 ;; key bindings
-(global-set-key (kbd "C-c f") 'ffip)
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "C-c s") 'find-grep)
-(global-set-key (kbd "C-c C-s") 'find-grep-dired)
+(global-set-key (kbd "C-c f") 'find-name-dired)
+(global-set-key (kbd "C-c s") 'find-grep-dired)
+(global-set-key (kbd "C-c C-s") 'find-grep)
 (global-set-key (kbd "C-c C-g") 'magit-status)
-(require 'expand-region)
-(global-set-key (kbd "C-c =") 'er/expand-region)
 (require 'xref)
 (global-set-key (kbd "C-c .") #'(lambda () (interactive)
 																	(xref-push-marker-stack)
@@ -148,8 +142,8 @@
 (require 'whitespace)
 (setq whitespace-style (quote
 												( face trailing )))
-;; (add-hook 'before-save-hook 'whitespace-cleanup)
-;; (global-whitespace-toggle-options t)
+(add-hook 'before-save-hook 'whitespace-cleanup)
+(global-whitespace-toggle-options t)
 
 (provide 'init)
 ;;; init.el ends here
