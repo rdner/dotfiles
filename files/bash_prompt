@@ -103,4 +103,6 @@ __prompt() {
 	PS1+="$(__prompt_jobs_count)"
 	# red if the last exit code was non-zero
 	PS1+=" $(__prompt_last_exit_code_color ${exit_code})\$${reset} "
+	# so all new terminals are open in the same directory
+	echo $PWD > ~/.last_dir
 }
