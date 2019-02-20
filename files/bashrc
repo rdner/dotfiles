@@ -55,3 +55,7 @@ fi
 if [ -f ~/.bash_env ]; then
 	source ~/.bash_env
 fi
+
+# go to the last directory from another session.
+# this has to be before the prompt function is executed for the first time
+[ -r ~/.last_dir ] && cd $(<~/.last_dir)
