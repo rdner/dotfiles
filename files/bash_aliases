@@ -25,8 +25,6 @@ alias emacs='emacsclient -ca ""'
 alias kcl='kubectl config get-contexts'
 alias kcu='kubectl config use-context'
 
-alias tar='tar --use-compress-program="pigz -9"' # multi-threaded compression
-
 if [ -f ~/.bash_aliases.local ]; then
 	source ~/.bash_aliases.local
 fi
