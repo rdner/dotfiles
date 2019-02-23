@@ -25,7 +25,7 @@ reset="\[\033[0m\]"
 # displays `ssh://` if it's a remote shell
 __prompt_ssh() {
 	if [[ "${SSH_TTY}" ]]; then
-		printf "${yellow}ssh://${reset}"
+		printf "${bold_yellow}ssh://${reset}"
 	fi;
 }
 
@@ -54,7 +54,7 @@ __prompt_git_status() {
 		# Otherwise display `~error~`.
 		local branch_name="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || \
 										git rev-parse --short HEAD 2> /dev/null || \
-										printf ${reset}${bg_red}${bold_white}error)";
+										printf ${reset}${bg_red}${bold_white}~error~)";
 
 		printf "${bold_light_blue}@${branch_name}${reset}"
 
@@ -65,17 +65,17 @@ __prompt_git_status() {
 
 			printf "${bold_yellow}"
 
-			# Check for uncommitted changes in the index.
+			# uncommitted changes
 			if ! $(git diff --quiet --ignore-submodules --cached); then
 				printf '|c';
 			fi;
 
-			# Check for unstaged changes.
+			# unstaged changes
 			if ! $(git diff-files --quiet --ignore-submodules --); then
 				printf '|s';
 			fi;
 
-			# Check for untracked files.
+			# untracked files
 			if [ -n "$(git ls-files --others --exclude-standard)" ]; then
 			  printf '|t';
 			fi;
@@ -88,21 +88,40 @@ __prompt_git_status() {
 }
 
 __prompt() {
+	# we have to save it first, otherwise it gets overwritten
+	# by the functions we run for the prompt
 	local exit_code=$?
-	# because some programs don't respect UNIX conventions and don't print \n
-	PS1="\n"
+	PS1=""
+
+	# some escaped characters like `\$` work in single quote marks only
+
 	# indicate SSH connection
 	PS1+="$(__prompt_ssh)"
+
 	# username and hostname
-	PS1+="${bold_light_purple}\u${reset}${bold_light_blue}@\H${reset}"
+	PS1+="${bold_light_purple}"
+	PS1+='\u'
+	PS1+="${reset}"
+	PS1+="${bold_light_blue}@"
+	PS1+='\H'
+	PS1+="${reset}:"
+
 	# working directory
-	PS1+="${bold_white}\w${reset}"
-	# amount of background jobs
+	PS1+="${bold_white}"
+	PS1+='\w'
+	PS1+="${reset}"
+
+	# git branch and status flags
 	PS1+="$(__prompt_git_status)"
-	# amount of background jobs
+
+	# amount of running/stopped background jobs
 	PS1+="$(__prompt_jobs_count)"
+
 	# red if the last exit code was non-zero
-	PS1+=" $(__prompt_last_exit_code_color ${exit_code})\$${reset} "
-	# so all new terminals are open in the same directory
+	PS1+=" $(__prompt_last_exit_code_color ${exit_code})"
+	PS1+='\$'
+	PS1+="${reset} "
+
+	# so all new terminals are open in the last directory
 	echo $PWD > ~/.last_dir
 }
