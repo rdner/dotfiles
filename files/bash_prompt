@@ -91,7 +91,7 @@ __prompt() {
 	# we have to save it first, otherwise it gets overwritten
 	# by the functions we run for the prompt
 	local exit_code=$?
-	PS1=""
+	PS1="\n" # some output does not contain trailing `\n` as it should
 
 	# some escaped characters like `\$` work in single quote marks only
 
