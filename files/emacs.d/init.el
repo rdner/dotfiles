@@ -93,7 +93,7 @@
 
 ;; web mode hooks
 (add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.(go)?html?\\'" . web-mode))
 
 ;; javascript
 (defun js-mode-setup ()
