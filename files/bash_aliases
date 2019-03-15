@@ -28,3 +28,5 @@ alias kcu='kubectl config use-context'
 if [ -f ~/.bash_aliases.local ]; then
 	source ~/.bash_aliases.local
 fi
+
+alias optimg='convert -strip -interlace Plane -quality 85%'
