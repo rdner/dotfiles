@@ -2,6 +2,10 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export EDITOR=emacs
 
+# use GPG for SSH authentication
+gpgconf --launch gpg-agent
+SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+
 # go environment
 export GOPATH="$HOME/go"
 export PATH="$PATH:$GOPATH/bin"
