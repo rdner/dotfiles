@@ -1,7 +1,7 @@
 [user]
 	name = Denis Rechkunov
 	email = mail@pragmader.me
-	signingkey = 2878FA9816392358
+	signingkey = 0xE476F00BCF08599B
 [push]
 	default = simple
 [core]
