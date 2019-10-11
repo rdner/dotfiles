@@ -130,7 +130,6 @@
 (add-hook 'go-mode-hook 'go-mode-setup)
 (eval-after-load 'flycheck
 	'(add-hook 'flycheck-mode-hook #'flycheck-golangci-lint-setup))
-(setq flycheck-golangci-lint-enable-all t)
 (setenv "GO111MODULE" "on")
 
 (defun go-playground-mode-setup ()
