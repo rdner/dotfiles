@@ -77,6 +77,7 @@
 (ido-mode t)
 (editorconfig-mode)
 (add-hook 'after-init-hook #'global-flycheck-mode)
+(setq-default flycheck-disabled-checkers '(go-staticcheck))
 
 ;; auto-encryption for *.gpg files
 (require 'epa-file)
