@@ -36,7 +36,6 @@
 											 go-autocomplete
 											 go-playground
 											 go-eldoc
-											 flycheck-golangci-lint
 											 protobuf-mode
 											 ))
 
@@ -128,8 +127,6 @@
 	(local-set-key (kbd "M-*") 'pop-tag-mark)
 	)
 (add-hook 'go-mode-hook 'go-mode-setup)
-(eval-after-load 'flycheck
-	'(add-hook 'flycheck-mode-hook #'flycheck-golangci-lint-setup))
 (setenv "GO111MODULE" "on")
 
 (defun go-playground-mode-setup ()
