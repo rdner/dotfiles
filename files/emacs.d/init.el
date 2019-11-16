@@ -37,6 +37,9 @@
 											 go-playground
 											 go-eldoc
 											 protobuf-mode
+
+											 ;; python
+											 jedi
 											 ))
 
 
@@ -136,6 +139,21 @@
 	(local-set-key (kbd "C-c r") 'go-playground-rm)
 	)
 (add-hook 'go-playground-mode-hook 'go-playground-mode-setup)
+
+;; python mode hooks
+(require 'jedi)
+(defun python-mode-setup ()
+	"Setups the Python development environment."
+	(setq
+		jedi:complete-on-dot t
+		jedi:server-args
+		'("--sys-path" "~/.local/lib/python3.7/site-packages"))
+	(jedi:setup)
+	(local-set-key (kbd "M-.") 'jedi:goto-definition)
+	(local-set-key (kbd "M-*") 'pop-tag-mark)
+)
+
+(add-hook 'python-mode-hook 'python-mode-setup)
 
 ;; whitespace cleaning
 (require 'whitespace)
