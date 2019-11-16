@@ -150,7 +150,7 @@
 		'("--sys-path" "~/.local/lib/python3.7/site-packages"))
 	(jedi:setup)
 	(local-set-key (kbd "M-.") 'jedi:goto-definition)
-	(local-set-key (kbd "M-*") 'pop-tag-mark)
+	(local-set-key (kbd "M-,") 'jedi:goto-definition-pop-marker)
 )
 
 (add-hook 'python-mode-hook 'python-mode-setup)
