@@ -9,7 +9,7 @@ function check_exist() {
 }
 
 function prompt_remove() {
-	read -p "Remove file: $1? " -n 1 -r
+	read -p "Remove file: $1?" -n 1 -r
 	echo
 	if [[ $REPLY =~ ^[Yy]$ ]]
 	then
