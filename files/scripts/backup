@@ -14,14 +14,14 @@ then
 fi
 
 function unlink_backup() {
-		(find $TMP_DIR -name "*.enc" -type f -exec unlink {} \; && \
-				 rm -d $TMP_DIR && \
+		(find "$TMP_DIR" -name "*.enc" -type f -exec unlink {} \; && \
+				 rm -d "$TMP_DIR" && \
 				 echo "All hard links unlinked and directory '$TMP_DIR' removed.") || \
 				(echo "Failed to unlink files and remove '$TMP_DIR'. Extra files?" && return 1)
 }
 
 function check_exists() {
-		if [ -d $TMP_DIR ]
+		if [ -d "$TMP_DIR" ]
 		then
 				echo "'$TMP_DIR' already exists. Unsuccessful run before?"
 				read -p "Unlink files and remove the directory '$TMP_DIR'? " -n 1 -r
@@ -35,13 +35,13 @@ function check_exists() {
 }
 
 check_exists || (echo "To run the script you must remove '$TMP_DIR'." && exit 1)
-mkdir $TMP_DIR || (echo "Failed to create a temporary directory '$TMP_DIR'." && exit 1)
+mkdir "$TMP_DIR" || (echo "Failed to create a temporary directory '$TMP_DIR'." && exit 1)
 
 echo "Creating hard links in '$TMP_DIR' for a sync command..."
-find . -path ./$TMP_DIR -prune -or -name "*.enc" -type f -exec sh -c 'ln {} '$TMP_DIR'"/$(basename {})"' \; || (echo "Failed to create hard links." && exit 1)
+find . -path "./$TMP_DIR" -prune -or -name "*.enc" -type f -exec sh -c 'ln {} "'$TMP_DIR'/$(basename {})"' \; || (echo "Failed to create hard links." && exit 1)
 
 echo "Performing synchronization dry run for '$dest'..."
-aws s3 sync --dryrun --storage-class STANDARD_IA $TMP_DIR/ $dest || (echo "Failed to perform dry run." && exit 1)
+aws s3 sync --dryrun --storage-class STANDARD_IA "$TMP_DIR/" "$dest" || (echo "Failed to perform dry run." && exit 1)
 
 echo "Dry run is successful."
 read -p "Proceed? " -n 1 -r
@@ -50,7 +50,7 @@ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 		echo "Performing synchronization with '$dest'..."
-		aws s3 sync --storage-class STANDARD_IA $TMP_DIR/ $dest || (echo "Failed to sync with S3." && exit 1)
+		aws s3 sync --storage-class STANDARD_IA "$TMP_DIR/" "$dest" || (echo "Failed to sync with S3." && exit 1)
 fi
 
 unlink_backup || (echo "Failed to unlink created hard links." && exit 1)
