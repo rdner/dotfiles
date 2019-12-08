@@ -1,0 +1,6 @@
+#!/bin/bash
+
+len=${1-16}
+charset=${2-'a-zA-Z_0-9'}
+
+head /dev/urandom | tr -dc $charset | fold -w $len | head -n 1
