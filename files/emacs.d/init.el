@@ -24,24 +24,24 @@
 (defvar package-list '(
 												gnu-elpa-keyring-update
 
-												flycheck
+												;; language servers
 												lsp-mode
 												lsp-ui
 												company
 												company-lsp
+												flycheck
+
 												whitespace
 												badwolf-theme
 												editorconfig
 												magit
 
 												;; general modes
+												json-mode
 												yaml-mode
+												dockerfile-mode
 												markdown-mode
-
-												;; web
-												web-mode
-												tern
-												tern-auto-complete
+												typescript-mode
 
 												;; golang
 												go-mode
@@ -103,24 +103,25 @@
 (setq company-lsp-async t)
 (setq lsp-enable-snippet nil)
 
+;; lsp hooks
+(add-hook 'go-mode-hook #'lsp)
+(add-hook 'python-mode-hook #'lsp)
+(add-hook `bash-mode-hook #'lsp)
+(add-hook `dockerfile-mode-hook #'lsp)
+(add-hook 'js-mode-hook #'lsp)
+(add-hook `css-mode-hook #'lsp)
+(add-hook `html-mode-hook #'lsp)
+(add-hook `typescript-mode-hook #'lsp)
+(add-hook `json-mode-hook #'lsp)
+(add-hook `yaml-mode-hook #'lsp)
+
 ;; hooks
 (add-hook 'prog-mode-hook #'hs-minor-mode) ; code block hide/show
-
-;; web mode hooks
-(add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.(go)?html?\\'" . web-mode))
-
-;; javascript
-(defun js-mode-setup ()
-  "Setups the JavaScript development environment."
-  (tern-mode)
-  )
-(add-hook 'js-mode-hook 'js-mode-setup)
 
 ;; go mode hooks
 (defun go-mode-setup ()
   "Setups the Go development environment."
-  (lsp)
+	(setenv "GO111MODULE" "on")
   (defun display-go-coverage ()
     "Displays coverage information for the current buffer in Go mode."
     (interactive)
@@ -130,29 +131,13 @@
     )
 
   (setq go-coverage-display-buffer-func 'display-buffer-same-window)
+  (setq gofmt-command "goimports")
   (setq compile-command "go build -v")
   (define-key (current-local-map) "\C-c\C-c" 'compile)
-  (setq gofmt-command "goimports")
-  (add-hook 'before-save-hook 'gofmt-before-save)
   (local-set-key (kbd "C-c c") 'display-go-coverage)
+  (add-hook 'before-save-hook 'gofmt-before-save)
   )
 (add-hook 'go-mode-hook 'go-mode-setup)
-(setenv "GO111MODULE" "on")
-
-(defun go-playground-mode-setup ()
-  "Setups the Go development environment."
-  (local-set-key (kbd "M-RET") 'go-playground-exec)
-  (local-set-key (kbd "C-c r") 'go-playground-rm)
-  )
-(add-hook 'go-playground-mode-hook 'go-playground-mode-setup)
-
-;; python mode hooks
-(require 'jedi)
-(defun python-mode-setup ()
-  "Setups the Python development environment."
-  (lsp)
-  )
-(add-hook 'python-mode-hook 'python-mode-setup)
 
 ;; whitespace cleaning
 (require 'whitespace)
