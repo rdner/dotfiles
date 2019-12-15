@@ -97,6 +97,7 @@
 
 ;; autocomplete
 (add-hook 'after-init-hook 'global-company-mode)
+(global-set-key (kbd "M-q") 'company-complete)
 
 (require 'company-lsp)
 (push 'company-lsp company-backends)
