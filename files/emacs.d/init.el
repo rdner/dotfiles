@@ -5,51 +5,60 @@
 ;; Web: HTML/CSS
 ;; JavaScript
 ;; Go
+;; Python
 
 ;;; Code:
 
 ;; packages
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+(setq package-archives
+  '(("GNU ELPA" . "https://elpa.gnu.org/packages/")
+		 ("MELPA Stable" . "https://stable.melpa.org/packages/")
+		 ("MELPA" . "https://melpa.org/packages/"))
+  package-archive-priorities
+  '(("MELPA Stable" . 10)
+		 ("MELPA" . 5)
+		 ("GNU ELPA" . 0)))
 (package-initialize)
-
 (defvar package-list '(
-											 flycheck
-											 auto-complete
-											 whitespace
-											 badwolf-theme
-											 editorconfig
-											 magit
+												gnu-elpa-keyring-update
 
-											 ;; general modes
-											 yaml-mode
-											 markdown-mode
+												flycheck
+												lsp-mode
+												lsp-ui
+												company
+												company-lsp
+												whitespace
+												badwolf-theme
+												editorconfig
+												magit
 
-											 ;; web
-											 web-mode
-											 tern
-											 tern-auto-complete
+												;; general modes
+												yaml-mode
+												markdown-mode
 
-											 ;; golang
-											 go-mode
-											 go-rename
-											 go-autocomplete
-											 go-playground
-											 go-eldoc
-											 protobuf-mode
+												;; web
+												web-mode
+												tern
+												tern-auto-complete
 
-											 ;; python
-											 jedi
-											 ))
+												;; golang
+												go-mode
+												go-rename
+												go-playground
+												protobuf-mode
+
+												))
 
 
 ;; fetch the list of packages available
 (unless package-archive-contents
-	(package-refresh-contents))
+  (package-refresh-contents))
 ;; install the missing packages
 (dolist (package package-list)
-	(unless (package-installed-p package)
-		(package-install package)))
+  (unless (package-installed-p package)
+    (package-install package)))
 (package-initialize) ; init autoloaded packages
 
 ;; appearance
@@ -70,26 +79,29 @@
 (global-set-key (kbd "C-c .") #'(lambda () (interactive)
 																	(xref-push-marker-stack)
 																	(message "Pushed %s:%d to the marker stack"
-																					 (buffer-name)
-																					 (line-number-at-pos)
-																					 )
+																		(buffer-name)
+																		(line-number-at-pos)
+																		)
 																	))
 
 ;; modes
+(require 'lsp-mode)
 (require 'go-mode)
 (ido-mode t)
 (editorconfig-mode)
 (add-hook 'after-init-hook #'global-flycheck-mode)
-(setq-default flycheck-disabled-checkers '(go-staticcheck))
+(setq-default flycheck-disabled-checkers '(go-staticcheck go-vet))
 
 ;; auto-encryption for *.gpg files
 (require 'epa-file)
 
 ;; autocomplete
-(require 'go-autocomplete) ; must be before the lines below
-(require 'auto-complete-config)
-(global-auto-complete-mode t)
-(ac-config-default)
+(add-hook 'after-init-hook 'global-company-mode)
+
+(require 'company-lsp)
+(push 'company-lsp company-backends)
+(setq company-lsp-async t)
+(setq lsp-enable-snippet nil)
 
 ;; hooks
 (add-hook 'prog-mode-hook #'hs-minor-mode) ; code block hide/show
@@ -100,65 +112,55 @@
 
 ;; javascript
 (defun js-mode-setup ()
-	"Setups the JavaScript development environment."
-	(tern-mode)
-	)
+  "Setups the JavaScript development environment."
+  (tern-mode)
+  )
 (add-hook 'js-mode-hook 'js-mode-setup)
 
 ;; go mode hooks
 (defun go-mode-setup ()
-	"Setups the Go development environment."
-	(defun display-go-coverage ()
-		"Displays coverage information for the current buffer in Go mode."
-		(interactive)
-		(shell-command "go test -coverprofile cover.out")
-		(go-coverage "cover.out")
-		(shell-command "rm cover.out")
-		)
+  "Setups the Go development environment."
+  (lsp)
+  (defun display-go-coverage ()
+    "Displays coverage information for the current buffer in Go mode."
+    (interactive)
+    (shell-command "go test -coverprofile cover.out")
+    (go-coverage "cover.out")
+    (shell-command "rm cover.out")
+    )
 
-	(setq go-coverage-display-buffer-func 'display-buffer-same-window)
-	(setq compile-command "go build -v")
-	(define-key (current-local-map) "\C-c\C-c" 'compile)
-	(require 'go-eldoc)
-	(go-eldoc-setup)
-	(setq gofmt-command "goimports")
-	(setq go-autocomplete-externals nil)
-	(add-hook 'before-save-hook 'gofmt-before-save)
-	(local-set-key (kbd "C-c r") 'go-rename)
-	(local-set-key (kbd "C-c c") 'display-go-coverage)
-	(local-set-key (kbd "C-c h") 'godoc-at-point)
-	(local-set-key (kbd "M-.") 'godef-jump)
-	(local-set-key (kbd "M-*") 'pop-tag-mark)
-	)
+  (setq go-coverage-display-buffer-func 'display-buffer-same-window)
+  (setq compile-command "go build -v")
+  (define-key (current-local-map) "\C-c\C-c" 'compile)
+  (setq gofmt-command "goimports")
+  (add-hook 'before-save-hook 'gofmt-before-save)
+  (local-set-key (kbd "C-c c") 'display-go-coverage)
+  (local-set-key (kbd "C-c h") 'godoc-at-point)
+  (local-set-key (kbd "M-.") 'godef-jump)
+  (local-set-key (kbd "M-*") 'pop-tag-mark)
+  )
 (add-hook 'go-mode-hook 'go-mode-setup)
 (setenv "GO111MODULE" "on")
 
 (defun go-playground-mode-setup ()
-	"Setups the Go development environment."
-	(local-set-key (kbd "M-RET") 'go-playground-exec)
-	(local-set-key (kbd "C-c r") 'go-playground-rm)
-	)
+  "Setups the Go development environment."
+  (local-set-key (kbd "M-RET") 'go-playground-exec)
+  (local-set-key (kbd "C-c r") 'go-playground-rm)
+  )
 (add-hook 'go-playground-mode-hook 'go-playground-mode-setup)
 
 ;; python mode hooks
 (require 'jedi)
 (defun python-mode-setup ()
-	"Setups the Python development environment."
-	(setq
-		jedi:complete-on-dot t
-		jedi:server-args
-		'("--sys-path" "~/.local/lib/python3.7/site-packages"))
-	(jedi:setup)
-	(local-set-key (kbd "M-.") 'jedi:goto-definition)
-	(local-set-key (kbd "M-,") 'jedi:goto-definition-pop-marker)
-)
-
+  "Setups the Python development environment."
+  (lsp)
+  )
 (add-hook 'python-mode-hook 'python-mode-setup)
 
 ;; whitespace cleaning
 (require 'whitespace)
 (setq whitespace-style (quote
-												( face trailing )))
+												 ( face trailing )))
 (add-hook 'before-save-hook 'whitespace-cleanup)
 (global-whitespace-toggle-options t)
 
