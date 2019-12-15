@@ -32,7 +32,7 @@
 												flycheck
 
 												whitespace
-												badwolf-theme
+												monokai-theme
 												editorconfig
 												magit
 
@@ -68,7 +68,7 @@
 (defvaralias 'c-basic-offset 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
 (setq-default indent-tabs-mode t)
-(load-theme 'badwolf t)
+(load-theme 'monokai t)
 
 ;; key bindings
 (global-set-key (kbd "C-c f") 'find-name-dired)
