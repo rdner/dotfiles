@@ -1,0 +1,18 @@
+#!/bin/bash
+
+GO111MODULE=on go get golang.org/x/tools/gopls@latest
+pip install python-language-server
+
+# Automation
+sudo npm i -g bash-language-server
+sudo npm i -g dockerfile-language-server-nodejs
+
+# WEB
+sudo npm i -g vscode-css-languageserver-bin
+sudo npm i -g vscode-html-languageserver-bin
+sudo npm i -g typescript-language-server
+sudo npm i -g typescript
+
+# Data
+sudo npm i -g vscode-json-languageserver
+sudo npm i -g yaml-language-server
