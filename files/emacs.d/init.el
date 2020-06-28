@@ -30,6 +30,7 @@
 												company
 												company-lsp
 												flycheck
+												flycheck-inline
 
 												whitespace
 												monokai-theme
@@ -49,6 +50,8 @@
 												go-playground
 												protobuf-mode
 
+												;; rust
+												rust-mode
 												))
 
 
@@ -87,6 +90,7 @@
 ;; modes
 (require 'lsp-mode)
 (require 'go-mode)
+(require 'rust-mode)
 (ido-mode t)
 (editorconfig-mode)
 (add-hook 'after-init-hook #'global-flycheck-mode)
@@ -106,6 +110,7 @@
 
 ;; lsp hooks
 (add-hook 'go-mode-hook #'lsp)
+(add-hook 'rust-mode-hook #'lsp)
 (add-hook 'python-mode-hook #'lsp)
 (add-hook `bash-mode-hook #'lsp)
 (add-hook `dockerfile-mode-hook #'lsp)
@@ -140,6 +145,14 @@
   )
 (add-hook 'go-mode-hook 'go-mode-setup)
 
+(defun rust-mode-setup ()
+  "Setups the Rust development environment."
+	(setq indent-tabs-mode nil)
+	(setq rust-format-on-save t)
+  (define-key (current-local-map) "\C-c\C-c" 'rust-run-clippy)
+	)
+(add-hook 'rust-mode-hook 'rust-mode-setup)
+
 ;; whitespace cleaning
 (require 'whitespace)
 (setq whitespace-style (quote
@@ -149,3 +162,17 @@
 
 (provide 'init)
 ;;; init.el ends here
+(custom-set-variables
+	;; custom-set-variables was added by Custom.
+	;; If you edit it by hand, you could mess it up, so be careful.
+	;; Your init file should contain only one such instance.
+	;; If there is more than one, they won't work right.
+	'(package-selected-packages
+		 (quote
+			 (yaml-mode typescript-mode protobuf-mode monokai-theme magit lsp-ui json-mode go-rename go-playground gnu-elpa-keyring-update flycheck editorconfig dockerfile-mode company-lsp badwolf-theme))))
+(custom-set-faces
+	;; custom-set-faces was added by Custom.
+	;; If you edit it by hand, you could mess it up, so be careful.
+	;; Your init file should contain only one such instance.
+	;; If there is more than one, they won't work right.
+	)
