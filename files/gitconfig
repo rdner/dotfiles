@@ -4,6 +4,8 @@
 	name = Denis Rechkunov
 	email = mail@pragmader.me
 	signingkey = 0xE476F00BCF08599B
+[pull]
+	ff = only
 [push]
 	default = simple
 [core]
