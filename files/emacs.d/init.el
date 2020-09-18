@@ -28,7 +28,6 @@
 												lsp-mode
 												lsp-ui
 												company
-												company-lsp
 												flycheck
 												flycheck-inline
 
@@ -103,10 +102,10 @@
 (add-hook 'after-init-hook 'global-company-mode)
 (global-set-key (kbd "M-q") 'company-complete)
 
-(require 'company-lsp)
-(push 'company-lsp company-backends)
-(setq company-lsp-async t)
+(require 'company-capf)
+(push 'company-capf company-backends)
 (setq lsp-enable-snippet nil)
+(setq lsp-enable-links nil)
 
 ;; lsp hooks
 (add-hook 'go-mode-hook #'lsp)
@@ -163,16 +162,16 @@
 (provide 'init)
 ;;; init.el ends here
 (custom-set-variables
-	;; custom-set-variables was added by Custom.
-	;; If you edit it by hand, you could mess it up, so be careful.
-	;; Your init file should contain only one such instance.
-	;; If there is more than one, they won't work right.
-	'(package-selected-packages
-		 (quote
-			 (yaml-mode typescript-mode protobuf-mode monokai-theme magit lsp-ui json-mode go-rename go-playground gnu-elpa-keyring-update flycheck editorconfig dockerfile-mode company-lsp badwolf-theme))))
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+	 (quote
+		(yaml-mode typescript-mode protobuf-mode monokai-theme magit lsp-ui json-mode go-rename go-playground gnu-elpa-keyring-update flycheck editorconfig dockerfile-mode company-lsp badwolf-theme))))
 (custom-set-faces
-	;; custom-set-faces was added by Custom.
-	;; If you edit it by hand, you could mess it up, so be careful.
-	;; Your init file should contain only one such instance.
-	;; If there is more than one, they won't work right.
-	)
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
