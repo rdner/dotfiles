@@ -78,6 +78,7 @@
 (global-set-key (kbd "C-c s") 'find-grep-dired)
 (global-set-key (kbd "C-c C-s") 'find-grep)
 (global-set-key (kbd "C-c C-g") 'magit-status)
+(global-set-key (kbd "C-c -") 'hs-toggle-hiding)
 
 ;; this allows to leave code markers and go back to them via the stack
 (require 'xref)
