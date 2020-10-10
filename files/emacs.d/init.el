@@ -28,6 +28,7 @@
 												flycheck
 												flycheck-inline
 												company
+												xclip
 
 												;; language server
 												lsp-mode
