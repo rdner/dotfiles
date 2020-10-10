@@ -139,6 +139,7 @@
 	;; disable annoying popups
 	(setq lsp-ui-sideline-enable nil)
 	(setq lsp-ui-doc-enable nil)
+	(setq compilation-read-command nil)
 
 	(local-set-key (kbd "M-.") 'lsp-ui-peek-find-definitions)
 	(local-set-key (kbd "M-?") 'lsp-ui-peek-find-references)
