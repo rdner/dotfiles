@@ -24,12 +24,14 @@
 (defvar package-list '(
 												gnu-elpa-keyring-update
 
-												;; language servers
-												lsp-mode
-												lsp-ui
-												company
+												;; essentials
 												flycheck
 												flycheck-inline
+												company
+
+												;; language server
+												lsp-mode
+												lsp-ui
 
 												whitespace
 												monokai-theme
@@ -45,7 +47,6 @@
 
 												;; golang
 												go-mode
-												go-rename
 												go-playground
 												protobuf-mode
 
@@ -77,6 +78,8 @@
 (global-set-key (kbd "C-c s") 'find-grep-dired)
 (global-set-key (kbd "C-c C-s") 'find-grep)
 (global-set-key (kbd "C-c C-g") 'magit-status)
+
+;; this allows to leave code markers and go back to them via the stack
 (require 'xref)
 (global-set-key (kbd "C-c .") #'(lambda () (interactive)
 																	(xref-push-marker-stack)
@@ -87,9 +90,6 @@
 																	))
 
 ;; modes
-(require 'lsp-mode)
-(require 'go-mode)
-(require 'rust-mode)
 (ido-mode t)
 (editorconfig-mode)
 (add-hook 'after-init-hook #'global-flycheck-mode)
@@ -104,10 +104,12 @@
 
 (require 'company-capf)
 (push 'company-capf company-backends)
-(setq lsp-enable-snippet nil)
-(setq lsp-enable-links nil)
 
-;; lsp hooks
+;; hooks
+(add-hook 'prog-mode-hook #'hs-minor-mode) ; code block hide/show
+
+;; lsp-mode
+(require 'lsp-mode)
 (add-hook 'go-mode-hook #'lsp)
 (add-hook 'rust-mode-hook #'lsp)
 (add-hook 'python-mode-hook #'lsp)
@@ -120,30 +122,55 @@
 (add-hook `json-mode-hook #'lsp)
 (add-hook `yaml-mode-hook #'lsp)
 
-;; hooks
-(add-hook 'prog-mode-hook #'hs-minor-mode) ; code block hide/show
+(setq lsp-enable-snippet nil)
+(setq lsp-enable-links nil)
+(setq lsp-modeline-diagnostics-enable t)
+(setq lsp-response-timeout 5)
 
-;; go mode hooks
+(require 'lsp-ui)
+(set-face-background 'lsp-ui-doc-background "black")
+(set-face-background 'lsp-ui-peek-peek "black")
+
+(defun lsp-mode-setup ()
+	"Setups the lsp mode."
+
+	;; disable annoying popups
+	(setq lsp-ui-sideline-enable nil)
+	(setq lsp-ui-doc-enable nil)
+
+	(local-set-key (kbd "M-.") 'lsp-ui-peek-find-definitions)
+	(local-set-key (kbd "M-?") 'lsp-ui-peek-find-references)
+	(local-set-key (kbd "C-c C-c") 'compile)
+	(local-set-key (kbd "C-c C-e") 'lsp-ui-flycheck-list)
+	(local-set-key (kbd "C-c C-d") 'lsp-ui-doc-glance)
+	(local-set-key (kbd "C-c C-i") 'lsp-ui-peek-find-implementation)
+	(local-set-key (kbd "C-c C-r") 'lsp-rename)
+
+  (add-hook 'before-save-hook 'lsp-format-buffer)
+	)
+(add-hook 'lsp-mode-hook 'lsp-mode-setup)
+
+;; go mode
+(require 'go-mode)
+(defun display-go-coverage ()
+	"Displays coverage information for the current buffer in Go mode."
+	(interactive)
+	(shell-command "go test -coverprofile cover.out")
+	(go-coverage "cover.out")
+	(shell-command "rm cover.out")
+	)
 (defun go-mode-setup ()
   "Setups the Go development environment."
 	(setenv "GO111MODULE" "on")
-  (defun display-go-coverage ()
-    "Displays coverage information for the current buffer in Go mode."
-    (interactive)
-    (shell-command "go test -coverprofile cover.out")
-    (go-coverage "cover.out")
-    (shell-command "rm cover.out")
-    )
-
   (setq go-coverage-display-buffer-func 'display-buffer-same-window)
-  (setq gofmt-command "goimports")
   (setq compile-command "go build -v")
   (define-key (current-local-map) "\C-c\C-c" 'compile)
   (local-set-key (kbd "C-c c") 'display-go-coverage)
-  (add-hook 'before-save-hook 'gofmt-before-save)
   )
 (add-hook 'go-mode-hook 'go-mode-setup)
 
+;; rust mode
+(require 'rust-mode)
 (defun rust-mode-setup ()
   "Setups the Rust development environment."
 	(setq indent-tabs-mode nil)
@@ -161,17 +188,3 @@
 
 (provide 'init)
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-	 (quote
-		(yaml-mode typescript-mode protobuf-mode monokai-theme magit lsp-ui json-mode go-rename go-playground gnu-elpa-keyring-update flycheck editorconfig dockerfile-mode company-lsp badwolf-theme))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
