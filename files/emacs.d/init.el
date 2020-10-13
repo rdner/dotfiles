@@ -150,6 +150,7 @@
 	(local-set-key (kbd "C-c C-r") 'lsp-rename)
 
   (add-hook 'before-save-hook 'lsp-format-buffer)
+  (add-hook 'before-save-hook 'lsp-organize-imports)
 	)
 (add-hook 'lsp-mode-hook 'lsp-mode-setup)
 
