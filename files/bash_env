@@ -9,7 +9,7 @@ SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 # go environment
 export GOPATH="$HOME/go"
 export PATH="$PATH:$GOPATH/bin"
-export GO111MODULE=auto
+export GO111MODULE=on
 
 # custom scripts
 if [ -d ~/.scripts ]; then
