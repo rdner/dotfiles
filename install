@@ -1,12 +1,28 @@
 #!/bin/bash
 
-DOTDIR=$PWD/files
-cd $DOTDIR
+set -e
 
-for file in $(ls)
+CURRENTDIR=$PWD
+DOTDIR=$PWD/files
+LAUNCHDIR=$PWD/launch
+LAUNCH_AGENTS=$HOME/Library/LaunchAgents
+
+for file in $(ls $DOTDIR)
 do
 	linked=$DOTDIR/$file
 	link=~/.$file
 	ln -sf $linked $link
 	echo "Symlink created: $link->$linked"
 done
+
+if [ $(uname) = "Darwin" ]
+then
+	echo "Creating launch agents for MacOS in $LAUNCH_AGENTS"
+	mkdir -p $LAUNCH_AGENTS
+	cp -r $LAUNCHDIR/* $LAUNCH_AGENTS
+	for file in $(ls $LAUNCHDIR)
+	do
+		echo "Loading $file to launchd"
+		launchctl load $LAUNCH_AGENTS/$file
+	done
+fi
