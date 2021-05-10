@@ -23,6 +23,7 @@
 (package-initialize)
 (defvar package-list '(
 												gnu-elpa-keyring-update
+												exec-path-from-shell
 
 												;; essentials
 												flycheck
@@ -64,6 +65,10 @@
   (unless (package-installed-p package)
     (package-install package)))
 (package-initialize) ; init autoloaded packages
+
+;; fix PATH variable
+(when (daemonp)
+  (exec-path-from-shell-initialize))
 
 ;; appearance
 (menu-bar-mode -1)
@@ -192,3 +197,16 @@
 
 (provide 'init)
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+	 '(rust-mode protobuf-mode go-playground go-mode typescript-mode dockerfile-mode yaml-mode json-mode magit editorconfig monokai-theme lsp-ui lsp-mode xclip company flycheck-inline flycheck gnu-elpa-keyring-update)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
