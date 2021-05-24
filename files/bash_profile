@@ -1,3 +1,9 @@
+# Basic environment
+export LC_ALL=en_GB.UTF-8
+export LANG=en_GB.UTF-8
+export CLICOLOR=1
+export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
+
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -48,12 +54,12 @@ fi
 
 # load aliases
 if [ -f ~/.bash_aliases ]; then
-	source ~/.bash_aliases
+	source ~/.aliases
 fi
 
 # load env
 if [ -f ~/.bash_env ]; then
-	source ~/.bash_env
+	source ~/.user_env
 fi
 
 # go to the last directory from another session.
