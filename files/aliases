@@ -1,0 +1,16 @@
+# common ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+alias emacs='emacsclient -c --socket-name=emacs-daemon'
+
+alias kcl='kubectl config get-contexts'
+alias kcu='kubectl config use-context'
+
+alias optimg='convert -strip -interlace Plane'
+
+# Local machine aliases if exist
+if [ -f ~/.aliases.local ]; then
+	source ~/.aliases.local
+fi
