@@ -5,7 +5,15 @@ export CLICOLOR=1
 export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
 
 # Options
-setopt prompt_subst
+# If set, parameter expansion, command substitution and arithmetic expansion are performed in prompts.
+setopt PROMPT_SUBST
+# Allow comments even in interactive shells.
+setopt INTERACTIVE_COMMENTS
+
+# EMACS keymap in ZLE
+bindkey -e
+# Fix the word navigation
+WORDCHARS=''
 
 # Aliases
 alias emacs='emacsclient -c --socket-name=emacs-daemon'
