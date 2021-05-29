@@ -9,7 +9,7 @@
 [push]
 	default = simple
 [core]
-	editor = emacsclient -ca ''
+	editor = emacsclient -c --socket-name=emacs-daemon
 [commit]
 	gpgsign = true
 [alias]
