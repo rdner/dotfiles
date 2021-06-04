@@ -25,10 +25,10 @@ autoload -Uz add-zsh-hook
 add-zsh-hook precmd vcs_info
 zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' use-prompt-escapes true
-zstyle ':vcs_info:*' stagedstr '%F{yellow}|s%f'
-zstyle ':vcs_info:*' unstagedstr '%F{yellow}|u%f'
-zstyle ':vcs_info:*' formats       '%K{white}%F{black}%b%f%k%u%c'
-zstyle ':vcs_info:*' actionformats '%K{white}%F{black}%b>%a%f%k%u%c'
+zstyle ':vcs_info:*' stagedstr '%F{yellow}s|%f'
+zstyle ':vcs_info:*' unstagedstr '%F{yellow}u|%f'
+zstyle ':vcs_info:*' formats       '%u%c%K{white}%F{black}%b%f%k'
+zstyle ':vcs_info:*' actionformats '%u%c%K{white}%F{black}%b%f%k>%a'
 
 # History
 export HISTFILE=~/.zhistory
