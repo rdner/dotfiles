@@ -4,6 +4,13 @@ setopt PROMPT_SUBST
 # Allow comments even in interactive shells.
 setopt INTERACTIVE_COMMENTS
 
+# History
+setopt HIST_IGNORE_ALL_DUPS # do not put duplicated command into history list
+setopt HIST_SAVE_NO_DUPS # do not save duplicated command
+setopt HIST_REDUCE_BLANKS # remove unnecessary blanks
+setopt INC_APPEND_HISTORY_TIME # append command to history file immediately after execution
+setopt EXTENDED_HISTORY # record command start time
+
 # EMACS keymap in ZLE
 bindkey -e
 # Fix the word navigation
@@ -20,8 +27,16 @@ zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' use-prompt-escapes true
 zstyle ':vcs_info:*' stagedstr '%F{yellow}|s%f'
 zstyle ':vcs_info:*' unstagedstr '%F{yellow}|u%f'
-zstyle ':vcs_info:*' formats       '%K{white}%F{black}@%b%f%k%u%c'
-zstyle ':vcs_info:*' actionformats '%K{white}%F{black}@%b>%a%f%k%u%c'
+zstyle ':vcs_info:*' formats       '%K{white}%F{black}%b%f%k%u%c'
+zstyle ':vcs_info:*' actionformats '%K{white}%F{black}%b>%a%f%k%u%c'
+
+# History
+export HISTFILE=~/.zhistory
+export HISTSIZE=1000000 # the maximum number of events stored in the internal history list
+export SAVEHIST=1000000 # the maximum number of history events to save in the history file.
+
+# `time` formatting
+export TIMEFMT="%J | CPU %U user, %S system, %*E total, %P | MEM %MkB"
 
 # reset the prompt
 PROMPT=""
@@ -33,12 +48,13 @@ fi;
 PROMPT+='%B%F{magenta}%n@%M%f%b'
 # working directory
 PROMPT+='%F{white}:%~%f'
-# # git branch and status flags
-PROMPT+='${vcs_info_msg_0_}'
 # amount of running background jobs on the machine
 PROMPT+='%(1j. [%j].)'
 # red if the last exit code was non-zero
 PROMPT+=' %(?.%F{green}.%F{red})%#%f '
+# git branch and status flags
+RPROMPT='${vcs_info_msg_0_}'
+ZLE_RPROMPT_INDENT=0
 
 # Load aliases
 if [ -f ~/.aliases ]; then
