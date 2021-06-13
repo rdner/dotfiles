@@ -1,0 +1,12 @@
+[Unit]
+Description=Emacs server
+Documentation=info:emacs man:emacs(1) https://gnu.org/software/emacs/
+
+[Service]
+Type=simple
+ExecStart=/bin/zsh -c '/usr/bin/emacs --fg-daemon=emacs-daemon'
+ExecStop=/bin/zsh -c '/usr/bin/emacsclient --socket-name=emacs-daemon --eval "(kill-emacs)"'
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
