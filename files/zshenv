@@ -2,13 +2,11 @@
 export LC_ALL=en_GB.UTF-8
 export CLICOLOR=1
 export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
+# To make sure the order is always right, we define the path here
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin
 
 # Favourite editor
 export EDITOR=emacs
-
-# Go environment
-export GOPATH="$HOME/go"
-export PATH="$GOPATH/bin:$PATH"
 
 # if homebrew is installed include its binaries
 function init_brew() {
@@ -29,6 +27,10 @@ function init_brew() {
 }
 init_brew
 unfunction init_brew
+
+# Go environment
+export GOPATH="$HOME/go"
+export PATH="$GOPATH/bin:$PATH"
 
 # Load user environment
 if [ -f ~/.zshenv.local ]; then
