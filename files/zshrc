@@ -1,3 +1,45 @@
+# Basic environment
+export LC_ALL=en_GB.UTF-8
+export CLICOLOR=1
+export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
+
+# Favourite editor
+export EDITOR=emacs
+
+# if homebrew is installed include its binaries
+function init_brew() {
+	local brewprefix=""
+
+	if [ -f "/usr/local/bin/brew" ]; then
+		 brewprefix=$(/usr/local/bin/brew --prefix);
+	fi
+
+	if [ -f "/opt/homebrew/bin/brew" ]; then
+		 brewprefix=$(/opt/homebrew/bin/brew --prefix);
+	fi
+
+	if [ $brewprefix ]; then
+		 export PATH="$brewprefix/bin:$brewprefix/sbin:$PATH";
+		 FPATH="$brewprefix/share/zsh/site-functions:$FPATH";
+	fi
+}
+init_brew
+unfunction init_brew
+
+# Go environment
+export GOPATH="$HOME/go"
+export PATH="$GOPATH/bin:$PATH"
+
+# Load machine-specific environment
+if [ -f ~/.zshrc.local ]; then
+	source ~/.zshrc.local;
+fi
+
+# Custom scripts
+if [ -d ~/.scripts ]; then
+	export PATH="$HOME/.scripts:$PATH";
+fi
+
 # Options
 # If set, parameter expansion, command substitution and arithmetic expansion are performed in prompts.
 setopt PROMPT_SUBST

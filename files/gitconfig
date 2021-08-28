@@ -6,6 +6,7 @@
 	signingkey = 0xE476F00BCF08599B
 [pull]
 	ff = only
+	rebase = true
 [push]
 	default = simple
 [core]
