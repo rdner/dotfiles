@@ -1,0 +1,32 @@
+# Favourite editor
+export EDITOR=emacs
+
+# if homebrew is installed include its binaries
+brewprefix=""
+
+if [ -f "/usr/local/bin/brew" ]; then
+		brewprefix=$(/usr/local/bin/brew --prefix);
+fi
+
+if [ -f "/opt/homebrew/bin/brew" ]; then
+		brewprefix=$(/opt/homebrew/bin/brew --prefix);
+fi
+
+if [ $brewprefix ]; then
+		export PATH="$brewprefix/bin:$brewprefix/sbin:$PATH";
+		export FPATH="$brewprefix/share/zsh/site-functions:$FPATH";
+fi
+
+# Go environment
+export GOPATH="$HOME/go"
+export PATH="$GOPATH/bin:$PATH"
+
+# Custom scripts
+if [ -d ~/.scripts ]; then
+	export PATH="$HOME/.scripts:$PATH";
+fi
+
+# Load machine-specific environment
+if [ -f ~/.zshenv.local ]; then
+	source ~/.zshenv.local;
+fi
