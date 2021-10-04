@@ -101,6 +101,8 @@
 (editorconfig-mode)
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (setq-default flycheck-disabled-checkers '(go-staticcheck go-vet))
+(when (version<= "26.0.50" emacs-version )
+  (global-display-line-numbers-mode))
 
 ;; auto-encryption for *.gpg files
 (require 'epa-file)
