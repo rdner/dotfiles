@@ -1,0 +1,6 @@
+#!/bin/bash
+
+len=${1-16}
+charset=${2-'a-zA-Z_0-9'}
+
+LC_ALL=C tr -dc $charset </dev/urandom | head -c $len ; echo -n
