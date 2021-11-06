@@ -1,32 +1,45 @@
-# Favourite editor
+# favourite editor
 export EDITOR=emacs
 
-# if homebrew is installed include its binaries
-brewprefix=""
+# since Mac has its `path_helper` that simply breaks using `.zshenv`,
+# I need this function to set a stable environment across non-login and login shells
+set_prgmdr_env() {
+	# to make the change transactional, in case of error nothing is changed
+	path="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+	fpath="/usr/local/share/zsh/site-functions:/usr/share/zsh/site-functions"
 
-if [ -f "/usr/local/bin/brew" ]; then
+	# if homebrew is installed include its binaries
+	brewprefix=""
+	if [ -f "/usr/local/bin/brew" ]; then
 		brewprefix=$(/usr/local/bin/brew --prefix);
-fi
-
-if [ -f "/opt/homebrew/bin/brew" ]; then
+	fi
+	if [ -f "/opt/homebrew/bin/brew" ]; then
 		brewprefix=$(/opt/homebrew/bin/brew --prefix);
-fi
+	fi
+	if [ $brewprefix ]; then
+		path="$brewprefix/bin:$brewprefix/sbin:$path";
+		fpath="$brewprefix/share/zsh/site-functions:$fpath";
+	fi
 
-if [ $brewprefix ]; then
-		export PATH="$brewprefix/bin:$brewprefix/sbin:$PATH";
-		export FPATH="$brewprefix/share/zsh/site-functions:$FPATH";
-fi
+	# if the `~/go` directory exists, setup the Go environment
+	if [ -d ~/go ]; then
+		export GOPATH="$HOME/go";
+		path="$GOPATH/bin:$path";
+	fi
 
-# Go environment
-export GOPATH="$HOME/go"
-export PATH="$GOPATH/bin:$PATH"
+	# custom scripts
+	if [ -d ~/.scripts ]; then
+		path="$HOME/.scripts:$path";
+	fi
 
-# Custom scripts
-if [ -d ~/.scripts ]; then
-	export PATH="$HOME/.scripts:$PATH";
-fi
+	export PATH="$path"
+	zsh_version="$(zsh --version | awk '{print $2}')"
+	export FPATH="$fpath:/usr/share/zsh/$zsh_version/functions"
 
-# Load machine-specific environment
-if [ -f ~/.zshenv.local ]; then
-	source ~/.zshenv.local;
-fi
+	# now the basic environment is set we can load the machine-specific environment
+	if [ -f ~/.zshenv.local ]; then
+		source ~/.zshenv.local;
+	fi
+}
+
+set_prgmdr_env
