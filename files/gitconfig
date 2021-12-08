@@ -4,8 +4,8 @@
 	defaultBranch = main
 [user]
 	name = Denis Rechkunov
-	email = mail@pragmader.me
-	signingkey = 0xE476F00BCF08599B
+	email = denis@rdner.de
+	signingkey = 0xCB54ACBA69913064
 [pull]
 	ff = only
 	rebase = true
