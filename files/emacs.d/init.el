@@ -1,4 +1,4 @@
-;;; init.el --- pragmader's emacs config file
+;;; init.el --- rdner's emacs config file
 
 ;;; Commentary:
 ;; This configuration includes development environments:
