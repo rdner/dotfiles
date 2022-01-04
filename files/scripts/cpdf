@@ -1,0 +1,2 @@
+#!/bin/bash
+gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile="$(basename $1 .pdf).comp.pdf" "$1"
