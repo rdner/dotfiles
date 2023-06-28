@@ -51,7 +51,7 @@ PROMPT+='%F{white}:%~%f'
 # amount of running background jobs on the machine
 PROMPT+='%(1j. [%j].)'
 # red if the last exit code was non-zero
-PROMPT+=' %(?.%F{green}.%F{red})%#%f '
+PROMPT+=' %(?.%F{green}%#.%F{red}%#|%?|)%f '
 # git branch and status flags
 RPROMPT='${vcs_info_msg_0_}'
 ZLE_RPROMPT_INDENT=0
@@ -65,3 +65,5 @@ fi
 if [ -f ~/.aliases ]; then
 	source ~/.aliases
 fi
+
+[[ -s "/Users/rdner/.gvm/scripts/gvm" ]] && source "/Users/rdner/.gvm/scripts/gvm"
