@@ -1,29 +1,31 @@
 #!/bin/bash
 
+set -e
+
 PROJECT_PATH="${PROJECT_PATH:-$PWD}"
 if [ "$PROJECT_PATH" == "" ]; then
-		echo "Project path cannot be empty, set either 'PWD' or 'PROJECT_PATH' variable."
-		exit 1
+	echo "Project path cannot be empty, set either 'PWD' or 'PROJECT_PATH' variable."
+	exit 1
 fi
 
 window_name=$1
 if [ "$window_name" == "" ]; then
-		window_name=$(basename $PWD)
+	window_name=$(basename $PWD)
 fi
 
 SESSION_NAME=$(tmux display-message -p '#S')
 if [ "$SESSION_NAME" == "" ]; then
-		tmux new-session -d
+	tmux new-session -d
 fi
 
 find_window() {
-		tmux list-windows -t "$SESSION_NAME" -F '#I "#W"' | awk "\$2 ~ /\"$window_name\"/ { print \$1 }"
+	tmux list-windows -t "$SESSION_NAME" -F '#I "#W"' | awk "\$2 ~ /\"$window_name\"/ { print \$1 }"
 }
 
 window_index=$(find_window)
 if [ "$window_index" != "" ]; then
-    echo "Window with name '$window_name' already exists (index=$window_index). Try another name.";
-    exit 1;
+  echo "Window with name '$window_name' already exists (index=$window_index). Try another name.";
+  exit 1
 fi
 
 # Prepare new window
@@ -31,13 +33,18 @@ tmux new-window -c "$PROJECT_PATH"
 tmux rename-window "$window_name"
 window_index=$(find_window)
 
+if [ -z "$window_index" ]; then
+	echo "Cannot find the created window '$window_name'"
+  exit 1
+fi
+
 # Prepare panes
-tmux splitw -h -p 50 -t "$SESSION_NAME:$window_index.1" -c "$PROJECT_PATH"
-tmux splitw -v -p 50 -t "$SESSION_NAME:$window_index.2" -c "$PROJECT_PATH"
+tmux split-window -h -l 50% -t "$SESSION_NAME:$window_index.1" -c "$PROJECT_PATH"
+tmux split-window -v -l 50% -t "$SESSION_NAME:$window_index.2" -c "$PROJECT_PATH"
 tmux send-keys -t "$SESSION_NAME:$window_index.1" "emacs ." Enter
 
 # Set focus and open
 tmux select-pane -t "$SESSION_NAME:$window_index.1"
 if [ "$TMUX" == "" ]; then
-		tmux attach
+	tmux attach
 fi
