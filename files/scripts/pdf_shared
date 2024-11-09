@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Compresses the given PDF file with the output in the given destination.
 compress_pdf() {
 		gs -q -dNOPAUSE -dBATCH -dSAFER -dQUIET \
 			 -sDEVICE=pdfwrite \
