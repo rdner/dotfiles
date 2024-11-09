@@ -1,0 +1,17 @@
+#!/bin/bash
+
+compress_pdf() {
+		gs -q -dNOPAUSE -dBATCH -dSAFER -dQUIET \
+			 -sDEVICE=pdfwrite \
+			 -dPDFSETTINGS=/screen \
+			 -dCannotEmbedFontPolicy=/Error \
+			 -dEmbedAllFonts=true \
+			 -dSubsetFonts=false \
+			 -dColorImageDownsampleType=/Bicubic \
+			 -dColorImageResolution=144 \
+			 -dGrayImageDownsampleType=/Bicubic \
+			 -dGrayImageResolution=144 \
+			 -dMonoImageDownsampleType=/Subsample \
+			 -dMonoImageResolution=144 \
+			 -sOutputFile="$2" "$1"
+}

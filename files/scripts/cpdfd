@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -e
+
+source pdf_shared
+
+process_file() {
+		echo "Compressing $1..."
+		tmp_filename="$1.comp"
+		errors=$(compress_pdf "$1" "$tmp_filename" 2>&1 >/dev/null)
+		if [ -n "$errors" ]; then
+				rm "$tmp_filename"
+				echo "Can't compress $1: $errors"
+				echo "Skipping $file..."
+				return
+		else
+				rm "$1" && mv "$tmp_filename" "$1"
+		fi
+}
+
+get_size() {
+		echo $(du -h | tail -n 1 | grep -oE '\d+\w+')
+}
+
+size_before=$(get_size)
+find . -name '*.pdf' -type file -not -name '.*' | while read file; do process_file "$file"; done
+size_after=$(get_size)
+echo "PDF documents were compressed from $size_before to $size_after"
