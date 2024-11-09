@@ -2,18 +2,18 @@
 
 # Compresses the given PDF file with the output in the given destination.
 compress_pdf() {
-		gs -q -dNOPAUSE -dBATCH -dSAFER -dQUIET \
-			 -sDEVICE=pdfwrite \
-			 -dPDFSETTINGS=/screen \
-			 -dCompatibilityLevel=1.3 \
-			 -dCannotEmbedFontPolicy=/Error \
-			 -dEmbedAllFonts=true \
-			 -dSubsetFonts=false \
-			 -dColorImageDownsampleType=/Bicubic \
-			 -dColorImageResolution=144 \
-			 -dGrayImageDownsampleType=/Bicubic \
-			 -dGrayImageResolution=144 \
-			 -dMonoImageDownsampleType=/Subsample \
-			 -dMonoImageResolution=144 \
-			 -sOutputFile="$2" "$1"
+	gs -q -dNOPAUSE -dBATCH -dSAFER -dQUIET \
+		 -sDEVICE=pdfwrite \
+		 -dPDFSETTINGS=/screen \
+		 -dCompatibilityLevel=1.3 \
+		 -dCannotEmbedFontPolicy=/Error \
+		 -dEmbedAllFonts=true \
+		 -dSubsetFonts=false \
+		 -dColorImageDownsampleType=/Bicubic \
+		 -dColorImageResolution=144 \
+		 -dGrayImageDownsampleType=/Bicubic \
+		 -dGrayImageResolution=144 \
+		 -dMonoImageDownsampleType=/Subsample \
+		 -dMonoImageResolution=144 \
+		 -sOutputFile="$2" "$1"
 }
