@@ -5,6 +5,7 @@ compress_pdf() {
 		gs -q -dNOPAUSE -dBATCH -dSAFER -dQUIET \
 			 -sDEVICE=pdfwrite \
 			 -dPDFSETTINGS=/screen \
+			 -dCompatibilityLevel=1.3 \
 			 -dCannotEmbedFontPolicy=/Error \
 			 -dEmbedAllFonts=true \
 			 -dSubsetFonts=false \
