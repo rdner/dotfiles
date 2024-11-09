@@ -9,24 +9,35 @@ set -e
 source pdf_shared
 
 process_file() {
-		echo "Compressing $1..."
-		tmp_filename="$1.comp"
-		errors=$(compress_pdf "$1" "$tmp_filename" 2>&1 >/dev/null)
-		if [ -n "$errors" ]; then
-				rm "$tmp_filename"
-				echo "Can't compress $1: $errors"
-				echo "Skipping $file..."
-				return
-		else
-				rm "$1" && mv "$tmp_filename" "$1"
-		fi
+	echo "Compressing $1..."
+	local tmp_filename="$1.comp"
+	local errors=$(compress_pdf "$1" "$tmp_filename" 2>&1 >/dev/null)
+	if [ -n "$errors" ]; then
+		rm "$tmp_filename"
+		echo "Can't compress '$1':"
+		echo "$errors"
+		echo "Skipping '$1'..."
+		return
+	fi
+
+	if [ "$(get_size "$tmp_filename")" -gt "$(get_size "$1")" ]; then
+		echo "The size after compression is larger: $(get_size_human "$tmp_filename") > $(get_size_human "$1"), skipping '$1'..."
+		rm "$tmp_filename"
+		return
+	fi
+
+	rm "$1" && mv "$tmp_filename" "$1"
 }
 
 get_size() {
-		echo $(du -h | tail -n 1 | grep -oE '\d+\w+')
+	echo $(du "$1" | tail -n 1 | grep -oE '\d+' | head -n 1)
 }
 
-size_before=$(get_size)
+get_size_human() {
+	echo $(du --si "$1" | tail -n 1 | grep -oE '\d+\w+' | head -n 1)
+}
+
+size_before=$(get_size_human .)
 find . -name '*.pdf' -type file -not -name '.*' | while read file; do process_file "$file"; done
-size_after=$(get_size)
+size_after=$(get_size_human .)
 echo "PDF documents were compressed from $size_before to $size_after"
