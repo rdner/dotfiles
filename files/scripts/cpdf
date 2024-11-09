@@ -4,4 +4,4 @@ source pdf_shared
 
 # Produces a compressed copy of the given document with the `comp.pdf` suffix.
 # The document is always created in the current directory.
-compress_pdf "$1" "$(pwd)/$(basename $1 .pdf).comp.pdf"
+compress_pdf "$1" "$(pwd)/$(basename "$1" .pdf).comp.pdf"
