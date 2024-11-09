@@ -1,2 +1,4 @@
 #!/bin/bash
-gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile="$(basename $1 .pdf).comp.pdf" "$1"
+
+source pdf_shared
+compress_pdf "$1" "$(pwd)/$(basename $1 .pdf).comp.pdf"
