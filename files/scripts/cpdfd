@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Finds all PDF documents recursively relative to the current directory
+# and compresses them all safely replacing the original files.
+# If something fails, the file remains untouched.
+
 set -e
 
 source pdf_shared
