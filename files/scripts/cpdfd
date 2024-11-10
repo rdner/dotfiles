@@ -8,6 +8,8 @@ set -e
 
 source pdf_shared
 
+threshold="${1:-1M}"
+
 process_file() {
 	echo "Compressing $1..."
 	local tmp_filename="$1.comp"
@@ -38,6 +40,6 @@ get_size_human() {
 }
 
 size_before=$(get_size_human .)
-find . -name '*.pdf' -type file -not -name '.*' | while read file; do process_file "$file"; done
+find . -name '*.pdf' -type file -not -name '.*' -size "+$threshold" | while read file; do process_file "$file"; done
 size_after=$(get_size_human .)
 echo "PDF documents were compressed from $size_before to $size_after"
