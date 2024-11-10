@@ -11,24 +11,25 @@ source pdf_shared
 threshold="${1:-1M}"
 
 process_file() {
-	echo "Compressing $1..."
+	echo "Compressing $1..." >&2
 	local tmp_filename="$1.comp"
 	local errors=$(compress_pdf "$1" "$tmp_filename" 2>&1 >/dev/null)
 	if [ -n "$errors" ]; then
 		rm "$tmp_filename"
-		echo "Can't compress '$1':"
-		echo "$errors"
-		echo "Skipping '$1'..."
+		echo "Can't compress '$1':" >&2
+		echo "$errors" >&2
+		echo "Skipping '$1'..." >&2
 		return
 	fi
 
 	if [ "$(get_size "$tmp_filename")" -gt "$(get_size "$1")" ]; then
-		echo "The size after compression is larger: $(get_size_human "$tmp_filename") > $(get_size_human "$1"), skipping '$1'..."
+		echo "The size after compression is larger: $(get_size_human "$tmp_filename") > $(get_size_human "$1"), skipping '$1'..." >&2
 		rm "$tmp_filename"
 		return
 	fi
 
 	rm "$1" && mv "$tmp_filename" "$1"
+	echo "$1"
 }
 
 get_size() {
@@ -42,4 +43,4 @@ get_size_human() {
 size_before=$(get_size_human .)
 find . -name '*.pdf' -type file -not -name '.*' -size "+$threshold" | while read file; do process_file "$file"; done
 size_after=$(get_size_human .)
-echo "PDF documents were compressed from $size_before to $size_after"
+echo "PDF documents were compressed from $size_before to $size_after" >&2
