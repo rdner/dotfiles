@@ -9,7 +9,7 @@
   <key>ProgramArguments</key>
   <array>
     <string>/opt/homebrew/bin/emacs</string>
-    <string>--fg-daemon=emacs-daemon</string>
+    <string>--fg-daemon=~/.emacs.d/tmp/emacs.sock</string>
   </array>
   <key>RunAtLoad</key>
   <true/>
