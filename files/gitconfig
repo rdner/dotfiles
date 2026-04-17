@@ -12,7 +12,7 @@
 [push]
 	default = simple
 [core]
-	editor = emacsclient -c --socket-name=emacs-daemon
+	editor = emacsclient -c -s ~/.emacs.d/tmp/emacs.sock
 [commit]
 	gpgsign = true
 [alias]
@@ -40,3 +40,5 @@
 	# cleanup old branches
 	outdated = "!git branch --merged | grep -v '\\*\\|master\\|develop'"
 	cleanup = "!git branch --merged | grep -v '\\*\\|master\\|develop' | xargs -n 1 git branch -d"
+[http]
+	cookiefile = /Users/rdner/.gitcookies
