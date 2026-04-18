@@ -1,5 +1,6 @@
 # favourite editor
 export EDITOR=emacs
+export TMPDIR=/tmp
 
 # since Mac has its `path_helper` that simply breaks using `.zshenv`,
 # I need this function to set a stable environment across non-login and login shells
