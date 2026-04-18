@@ -7,8 +7,8 @@ set -e
 
 # Check if folder argument is provided
 if [ $# -ne 1 ]; then
-		echo "Usage: $0 <folder_path>"
-		exit 1
+    echo "Usage: $0 <folder_path>"
+    exit 1
 fi
 
 FOLDER_PATH="$1"
@@ -17,13 +17,18 @@ DMG_NAME="${BASENAME}.dmg"
 
 # Validate that the folder exists
 if [ ! -d "$FOLDER_PATH" ]; then
-		echo "Error: Folder '$FOLDER_PATH' does not exist."
-		exit 1
+    echo "Error: Folder '$FOLDER_PATH' does not exist."
+    exit 1
 fi
 
-# Get directory where script is located (or current directory)
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DMG_PATH="${SCRIPT_DIR}/${DMG_NAME}"
+# Output location: always in current working directory
+OUTPUT_DIR="$(pwd)"
+DMG_PATH="${OUTPUT_DIR}/${DMG_NAME}"
+
+# Generate timestamp prefix: YYYY-MM-DD_HH_MM
+TIMESTAMP=$(date +"%Y-%m-%d_%H_%M")
+DMG_FILENAME="${TIMESTAMP}_${DMG_NAME}"
+DMG_PATH="${OUTPUT_DIR}/${DMG_FILENAME}"
 
 echo "Creating encrypted DMG for: $FOLDER_PATH"
 echo "Output will be: $DMG_PATH"
@@ -37,25 +42,26 @@ read -sr CONFIRM_PASSWORD
 echo ""
 
 if [ "$PASSWORD" != "$CONFIRM_PASSWORD" ]; then
-		echo "Error: Passwords do not match."
-		exit 1
+    echo "Error: Passwords do not match."
+    exit 1
 fi
 
-# Clean up old DMG if it exists
+# Clean up old DMG if it exists (with same timestamp prefix)
 if [ -f "$DMG_PATH" ]; then
-		echo "Removing existing DMG: $DMG_PATH"
-		rm "$DMG_PATH"
+    echo "Removing existing DMG: $DMG_PATH"
+    rm "$DMG_PATH"
 fi
 
-# Create the encrypted DMG using hdiutil with AES-256
-hdiutil create -volname "$BASENAME" \
-				-fs HFS+J \
-				-srcfolder "$FOLDER_PATH" \
-				-ov \
-				-format UDZO \
-				-encryption aes256 \
-				-passphrase "$PASSWORD" \
-				"$DMG_PATH"
+# Create the encrypted DMG using hdiutil with AES-256 and stdinpass
+# Password piped via printf to avoid echo -n issues with special characters
+printf '%s' "$PASSWORD" | hdiutil create \
+    -volname "$BASENAME" \
+    -encryption AES-256 \
+    -srcfolder "$FOLDER_PATH" \
+    -ov \
+    -format UDZO \
+    -stdinpass \
+    "$DMG_PATH"
 
 echo ""
-echo "Success! Created encrypted DMG: $DMG_PATH"~
+echo "Success! Created encrypted DMG: $DMG_PATH"
