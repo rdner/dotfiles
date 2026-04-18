@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# Create an encrypted .dmg file from a folder
+# Usage: ./create_encrypted_dmg.sh <folder_path>
+
+set -e
+
+# Check if folder argument is provided
+if [ $# -ne 1 ]; then
+		echo "Usage: $0 <folder_path>"
+		exit 1
+fi
+
+FOLDER_PATH="$1"
+BASENAME=$(basename "$FOLDER_PATH")
+DMG_NAME="${BASENAME}.dmg"
+
+# Validate that the folder exists
+if [ ! -d "$FOLDER_PATH" ]; then
+		echo "Error: Folder '$FOLDER_PATH' does not exist."
+		exit 1
+fi
+
+# Get directory where script is located (or current directory)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DMG_PATH="${SCRIPT_DIR}/${DMG_NAME}"
+
+echo "Creating encrypted DMG for: $FOLDER_PATH"
+echo "Output will be: $DMG_PATH"
+
+# Read password interactively (not stored in history)
+echo "Enter encryption password:"
+read -sr PASSWORD
+echo ""
+echo "Confirm password:"
+read -sr CONFIRM_PASSWORD
+echo ""
+
+if [ "$PASSWORD" != "$CONFIRM_PASSWORD" ]; then
+		echo "Error: Passwords do not match."
+		exit 1
+fi
+
+# Clean up old DMG if it exists
+if [ -f "$DMG_PATH" ]; then
+		echo "Removing existing DMG: $DMG_PATH"
+		rm "$DMG_PATH"
+fi
+
+# Create the encrypted DMG using hdiutil with AES-256
+hdiutil create -volname "$BASENAME" \
+				-fs HFS+J \
+				-srcfolder "$FOLDER_PATH" \
+				-ov \
+				-format UDZO \
+				-encryption aes256 \
+				-passphrase "$PASSWORD" \
+				"$DMG_PATH"
+
+echo ""
+echo "Success! Created encrypted DMG: $DMG_PATH"~
