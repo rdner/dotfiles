@@ -11,6 +11,7 @@
 
 ;; packages
 (require 'package)
+(setq server-socket-dir "/tmp/emacs-sockets")
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (setq package-archives
   '(("GNU ELPA" . "https://elpa.gnu.org/packages/")

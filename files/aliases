@@ -3,7 +3,7 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-alias emacs='emacsclient -c -s ~/.emacs.d/tmp/emacs.sock'
+alias emacs='emacsclient -c -s /tmp/emacs-sockets/emacs-daemon'
 
 alias kcl='kubectl config get-contexts'
 alias kcu='kubectl config use-context'
