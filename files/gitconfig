@@ -12,7 +12,7 @@
 [push]
 	default = simple
 [core]
-	editor = emacsclient -c -s ~/.emacs.d/tmp/emacs.sock
+	editor = emacsclient -c -s /tmp/emacs-sockets/emacs-daemon
 [commit]
 	gpgsign = true
 [alias]
